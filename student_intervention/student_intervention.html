@@ -316,7 +316,7 @@ div#notebook {
 <span class="n">n_failed</span> <span class="o">=</span> <span class="p">(</span><span class="n">student_data</span><span class="p">[</span><span class="s1">&#39;passed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;no&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
 <span class="c1"># TODO: Calculate graduation rate</span>
-<span class="n">grad_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_passed</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_students</span><span class="p">)</span>
+<span class="n">grad_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_passed</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_students</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
 
 <span class="c1"># Print the results</span>
 <span class="k">print</span> <span class="s2">&quot;Total number of students: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_students</span><span class="p">)</span>
@@ -340,7 +340,7 @@ div#notebook {
 Number of features: 31
 Number of students who passed: 265
 Number of students who failed: 130
-Graduation rate of the class: 0.67%
+Graduation rate of the class: 67.09%
 </pre>
 </div>
 </div>
@@ -601,10 +601,15 @@ Testing set has 95 samples.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>
-<strong>Decision Tree</strong> Model can be used to predict the tumor is malignant or not. Pro: run fast when instances are large con: less accurate than SVM.</p>
-<p><strong>SVM</strong> Model can be used for hand-writting recognition, image processing. Pro: high performance and accuracy. It can be applied on both linear problem and ploynomial problem due to the choices of kernal params. Con: run slow when instances are large.</p>
-<p><strong>Logistic Regression</strong> Model can be used to predict the probablity of raining or not tomorrow. Pro: flexible on changing the threshold. Run fast when instances are large. Con: less accurate than SVM</p>
+<p><strong>Answer: </strong></p>
+<p><strong>Decision Tree</strong></p>
+<p>Model can be used to predict the tumor is malignant or not. Given the data size and its feature amount, decision tree can be more efficient since there are many features can be used and data isn't that large. 
+<strong>Pro</strong>: Decision tree can learn non-linear relationships, and are fairly robust to outliers. <strong>Con</strong>: They can be extremely sensitive to small perturbationsin the data, a slight change can result in a drastically different tree. They can easily overfit, although this can be solved by pruning and cross validation. They can have problems out-of-sample prediction.</p>
+<p><strong>SVM</strong></p>
+<p>Model can be used for hand-writting recognition, image processing. Since the data is small considering the amount of features, it allows the model run faster and also be able to tune on different kernel options. 
+<strong>Pro</strong>: high performance and accuracy. It can be applied on both linear problem and ploynomial problem due to the choices of kernal params. They are fairly robust against overfitting, especially in high-dimensional space. <strong>Con</strong>: SVM's are memory intensive, trickier to tune due to the importance of picking the right kernel, and don't scale well to larger datasets.</p>
+<p><strong>Logistic Regression</strong></p>
+<p>Model can be used to predict the probablity of raining or not tomorrow. The output can provide a probabilistic interpretation which is very applicable on this case to illustrate not just either pass or fail but giving the numerical chance of pass or fail. <strong>Pro</strong>: Outputs have a nice probabilistic interpretation, and the algorithm can be regularized to avoid overfitting. Logistic models can be updated easily with new data using stochastic gradient descent.  <strong>Con</strong>: Logistic Regression tends to underperform when there are multiple or non-linear decision boundaries. They are not flexible enough to naturally capture more complex relationships.</p>
 
 </div>
 </div>
@@ -711,9 +716,9 @@ Testing set has 95 samples.
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
 
 <span class="c1"># TODO: Initialize the three models</span>
-<span class="n">clf_A</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">()</span>
-<span class="n">clf_B</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">()</span>
-<span class="n">clf_C</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">clf_A</span> <span class="o">=</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_B</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_C</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># TODO: Set up the training set sizes</span>
 <span class="n">X_train_100</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
@@ -761,66 +766,66 @@ Testing set has 95 samples.
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Training a SVC using a training set size of 100. . .
-Trained model in 0.0019 seconds
-Made predictions in 0.0011 seconds.
+Trained model in 0.0069 seconds
+Made predictions in 0.0016 seconds.
 F1 score for training set: 0.8777.
 Made predictions in 0.0009 seconds.
 F1 score for test set: 0.7746.
 ==========================================
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0035 seconds
-Made predictions in 0.0023 seconds.
+Trained model in 0.0036 seconds
+Made predictions in 0.0022 seconds.
 F1 score for training set: 0.8679.
-Made predictions in 0.0011 seconds.
+Made predictions in 0.0012 seconds.
 F1 score for test set: 0.7815.
 ==========================================
 Training a SVC using a training set size of 300. . .
-Trained model in 0.0073 seconds
-Made predictions in 0.0057 seconds.
+Trained model in 0.0076 seconds
+Made predictions in 0.0048 seconds.
 F1 score for training set: 0.8761.
-Made predictions in 0.0017 seconds.
+Made predictions in 0.0016 seconds.
 F1 score for test set: 0.7838.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 100. . .
-Trained model in 0.0011 seconds
-Made predictions in 0.0002 seconds.
+Trained model in 0.0028 seconds
+Made predictions in 0.0008 seconds.
 F1 score for training set: 1.0000.
 Made predictions in 0.0002 seconds.
 F1 score for test set: 0.6552.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 200. . .
-Trained model in 0.0015 seconds
+Trained model in 0.0016 seconds
 Made predictions in 0.0002 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0004 seconds.
-F1 score for test set: 0.7538.
+Made predictions in 0.0002 seconds.
+F1 score for test set: 0.7500.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 300. . .
-Trained model in 0.0029 seconds
+Trained model in 0.0021 seconds
 Made predictions in 0.0003 seconds.
 F1 score for training set: 1.0000.
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.6935.
+F1 score for test set: 0.6613.
 ==========================================
 Training a LogisticRegression using a training set size of 100. . .
-Trained model in 0.0014 seconds
-Made predictions in 0.0002 seconds.
+Trained model in 0.0046 seconds
+Made predictions in 0.0009 seconds.
 F1 score for training set: 0.8593.
 Made predictions in 0.0002 seconds.
 F1 score for test set: 0.7647.
 ==========================================
 Training a LogisticRegression using a training set size of 200. . .
-Trained model in 0.0020 seconds
-Made predictions in 0.0003 seconds.
+Trained model in 0.0021 seconds
+Made predictions in 0.0005 seconds.
 F1 score for training set: 0.8562.
-Made predictions in 0.0003 seconds.
+Made predictions in 0.0002 seconds.
 F1 score for test set: 0.7914.
 ==========================================
 Training a LogisticRegression using a training set size of 300. . .
 Trained model in 0.0031 seconds
-Made predictions in 0.0004 seconds.
+Made predictions in 0.0003 seconds.
 F1 score for training set: 0.8468.
-Made predictions in 0.0002 seconds.
+Made predictions in 0.0003 seconds.
 F1 score for test set: 0.8060.
 ==========================================
 </pre>
@@ -859,22 +864,22 @@ F1 score for test set: 0.8060.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0022</td>
+<td style="text-align:center">0.0025</td>
 <td style="text-align:center">0.0011</td>
 <td style="text-align:center">0.8777</td>
 <td style="text-align:center">0.7746</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0053</td>
-<td style="text-align:center">0.0020</td>
+<td style="text-align:center">0.0042</td>
+<td style="text-align:center">0.0028</td>
 <td style="text-align:center">0.8679</td>
 <td style="text-align:center">0.7815</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0136</td>
-<td style="text-align:center">0.0023</td>
+<td style="text-align:center">0.0159</td>
+<td style="text-align:center">0.0017</td>
 <td style="text-align:center">0.8761</td>
 <td style="text-align:center">0.7838</td>
 </tr>
@@ -893,24 +898,24 @@ F1 score for test set: 0.8060.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0013</td>
-<td style="text-align:center">0.0003</td>
+<td style="text-align:center">0.0011</td>
+<td style="text-align:center">0.0005</td>
 <td style="text-align:center">1</td>
-<td style="text-align:center">0.6429</td>
+<td style="text-align:center">0.6552</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0016</td>
+<td style="text-align:center">0.0022</td>
 <td style="text-align:center">0.0002</td>
 <td style="text-align:center">1</td>
-<td style="text-align:center">0.7460</td>
+<td style="text-align:center">0.7500</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0021</td>
-<td style="text-align:center">0.0002</td>
+<td style="text-align:center">0.0025</td>
+<td style="text-align:center">0.0003</td>
 <td style="text-align:center">1</td>
-<td style="text-align:center">0.6870</td>
+<td style="text-align:center">0.6613</td>
 </tr>
 </tbody>
 </table>
@@ -927,22 +932,22 @@ F1 score for test set: 0.8060.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0050</td>
-<td style="text-align:center">0.0009</td>
+<td style="text-align:center">0.0015</td>
+<td style="text-align:center">0.0003</td>
 <td style="text-align:center">0.8593</td>
 <td style="text-align:center">0.7647</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0029</td>
-<td style="text-align:center">0.0014</td>
+<td style="text-align:center">0.0026</td>
+<td style="text-align:center">0.0012</td>
 <td style="text-align:center">0.8562</td>
 <td style="text-align:center">0.7914</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0047</td>
-<td style="text-align:center">0.0002</td>
+<td style="text-align:center">0.0086</td>
+<td style="text-align:center">0.0005</td>
 <td style="text-align:center">0.8468</td>
 <td style="text-align:center">0.8060</td>
 </tr>
@@ -998,7 +1003,7 @@ F1 score for test set: 0.8060.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong>
-Logistic Regression will provide the probablity of student's pass or fail. I broke training dataset into three portion, (100, 200, 300) and run logistic regression classifier to train the model, then apply them on the same testing dataset to get the accuracy score. The accuracy score tells me that with the increase volume of the training dataset, the logistic model provides higher accuracy score on the testing dataset along with the least time spent on running the model.</p>
+After initial training by using the training data, Logistic regression will iteratively using instances to get the most accurate line/plane (decision boundry) to seperate results into two areas which tells students who's pass from fail. After learning from the training data, then apply the test data on the model, it can tell you which instance (student) belong to which area among these two. Also, based on the distance between each instance and the line, the closer the less confident the predicted result would be. Since the accuracy score for logistic regression on the testing data is higher than the other two, which indicates logistic model learned from the training data the best and predicts more accurately.</p>
 
 </div>
 </div>
@@ -1029,7 +1034,7 @@ Logistic Regression will provide the probablity of student's pass or fail. I bro
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
