@@ -307,7 +307,7 @@ div#notebook {
 <span class="n">n_students</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="p">)</span>
 
 <span class="c1"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
 <span class="c1"># TODO: Calculate passing students</span>
 <span class="n">n_passed</span> <span class="o">=</span> <span class="p">(</span><span class="n">student_data</span><span class="p">[</span><span class="s1">&#39;passed&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -337,7 +337,7 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -524,7 +524,17 @@ Feature values:
 
 <span class="c1"># TODO: Set the number of training points</span>
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="c1">#num_train = 300</span>
+<span class="n">y1</span><span class="p">,</span> <span class="n">n1</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y2</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="k">print</span> <span class="nb">float</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="n">n1</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span><span class="o">/</span><span class="n">n2</span>
+
+<span class="c1">#using stratify to balance the positive and negative data in sampling</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="n">y_all</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">y1</span><span class="p">,</span> <span class="n">n1</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y2</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+<span class="k">print</span> <span class="s2">&quot;with Stratify: &quot;</span>
+<span class="k">print</span> <span class="nb">float</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="n">n1</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span><span class="o">/</span><span class="n">n2</span>
 
 <span class="c1"># Set the number of testing points</span>
 <span class="c1">#num_test = X_all.shape[0] - num_train</span>
@@ -550,7 +560,10 @@ Feature values:
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Training set has 300 samples.
+<pre>2.15789473684 1.71428571429
+with Stratify: 
+2.0303030303 2.06451612903
+Training set has 300 samples.
 Testing set has 95 samples.
 </pre>
 </div>
@@ -610,6 +623,8 @@ Testing set has 95 samples.
 <strong>Pro</strong>: high performance and accuracy. It can be applied on both linear problem and ploynomial problem due to the choices of kernal params. They are fairly robust against overfitting, especially in high-dimensional space. <strong>Con</strong>: SVM's are memory intensive, trickier to tune due to the importance of picking the right kernel, and don't scale well to larger datasets.</p>
 <p><strong>Logistic Regression</strong></p>
 <p>Model can be used to predict the probablity of raining or not tomorrow. The output can provide a probabilistic interpretation which is very applicable on this case to illustrate not just either pass or fail but giving the numerical chance of pass or fail. <strong>Pro</strong>: Outputs have a nice probabilistic interpretation, and the algorithm can be regularized to avoid overfitting. Logistic models can be updated easily with new data using stochastic gradient descent.  <strong>Con</strong>: Logistic Regression tends to underperform when there are multiple or non-linear decision boundaries. They are not flexible enough to naturally capture more complex relationships.</p>
+<p>reference : <a href="https://elitedatascience.com/machine-learning-algorithms">https://elitedatascience.com/machine-learning-algorithms</a>
+reference: <a href="https://stats.stackexchange.com/questions/1292/what-is-the-weak-side-of-decision-trees">https://stats.stackexchange.com/questions/1292/what-is-the-weak-side-of-decision-trees</a></p>
 
 </div>
 </div>
@@ -766,67 +781,67 @@ Testing set has 95 samples.
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Training a SVC using a training set size of 100. . .
-Trained model in 0.0069 seconds
+Trained model in 0.0074 seconds
 Made predictions in 0.0016 seconds.
-F1 score for training set: 0.8777.
+F1 score for training set: 0.8354.
 Made predictions in 0.0009 seconds.
-F1 score for test set: 0.7746.
+F1 score for test set: 0.8025.
 ==========================================
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0036 seconds
-Made predictions in 0.0022 seconds.
-F1 score for training set: 0.8679.
-Made predictions in 0.0012 seconds.
-F1 score for test set: 0.7815.
+Trained model in 0.0038 seconds
+Made predictions in 0.0027 seconds.
+F1 score for training set: 0.8431.
+Made predictions in 0.0013 seconds.
+F1 score for test set: 0.8105.
 ==========================================
 Training a SVC using a training set size of 300. . .
-Trained model in 0.0076 seconds
-Made predictions in 0.0048 seconds.
-F1 score for training set: 0.8761.
-Made predictions in 0.0016 seconds.
-F1 score for test set: 0.7838.
+Trained model in 0.0081 seconds
+Made predictions in 0.0057 seconds.
+F1 score for training set: 0.8664.
+Made predictions in 0.0018 seconds.
+F1 score for test set: 0.8052.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 100. . .
-Trained model in 0.0028 seconds
-Made predictions in 0.0008 seconds.
+Trained model in 0.0029 seconds
+Made predictions in 0.0007 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.6552.
+Made predictions in 0.0003 seconds.
+F1 score for test set: 0.6452.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 200. . .
-Trained model in 0.0016 seconds
-Made predictions in 0.0002 seconds.
+Trained model in 0.0018 seconds
+Made predictions in 0.0004 seconds.
 F1 score for training set: 1.0000.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7500.
+Made predictions in 0.0006 seconds.
+F1 score for test set: 0.7258.
 ==========================================
 Training a DecisionTreeClassifier using a training set size of 300. . .
-Trained model in 0.0021 seconds
-Made predictions in 0.0003 seconds.
+Trained model in 0.0022 seconds
+Made predictions in 0.0005 seconds.
 F1 score for training set: 1.0000.
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.6613.
+F1 score for test set: 0.6838.
 ==========================================
 Training a LogisticRegression using a training set size of 100. . .
-Trained model in 0.0046 seconds
-Made predictions in 0.0009 seconds.
-F1 score for training set: 0.8593.
+Trained model in 0.0045 seconds
+Made predictions in 0.0012 seconds.
+F1 score for training set: 0.8671.
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7647.
+F1 score for test set: 0.7068.
 ==========================================
 Training a LogisticRegression using a training set size of 200. . .
-Trained model in 0.0021 seconds
-Made predictions in 0.0005 seconds.
-F1 score for training set: 0.8562.
-Made predictions in 0.0002 seconds.
-F1 score for test set: 0.7914.
+Trained model in 0.0042 seconds
+Made predictions in 0.0025 seconds.
+F1 score for training set: 0.8211.
+Made predictions in 0.0021 seconds.
+F1 score for test set: 0.7391.
 ==========================================
 Training a LogisticRegression using a training set size of 300. . .
-Trained model in 0.0031 seconds
-Made predictions in 0.0003 seconds.
-F1 score for training set: 0.8468.
-Made predictions in 0.0003 seconds.
-F1 score for test set: 0.8060.
+Trained model in 0.0166 seconds
+Made predictions in 0.0011 seconds.
+F1 score for training set: 0.8512.
+Made predictions in 0.0009 seconds.
+F1 score for test set: 0.7500.
 ==========================================
 </pre>
 </div>
@@ -1002,8 +1017,8 @@ F1 score for test set: 0.8060.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>
-After initial training by using the training data, Logistic regression will iteratively using instances to get the most accurate line/plane (decision boundry) to seperate results into two areas which tells students who's pass from fail. After learning from the training data, then apply the test data on the model, it can tell you which instance (student) belong to which area among these two. Also, based on the distance between each instance and the line, the closer the less confident the predicted result would be. Since the accuracy score for logistic regression on the testing data is higher than the other two, which indicates logistic model learned from the training data the best and predicts more accurately.</p>
+<p><strong>Answer: </strong></p>
+<p>After the initial training using the training data Logistic Regression gives each feature a weight. Since Each student is “defined” by a set of characteristics/attributes: gender, address, the school attended, etc… Each features will contribute differently to the final results. For example: if all the students whose parents are teacher graduated successfully, but not all the male student graduated, so the model will give a larger weight on parent's job than student's sex. Logistic regression will using trainning data to iteratively calculate the weight for each features. When we are predicting we take all feature values and times the corresponding weights, then sum up all of them to get a final number. This final result is applied to a special function called sigmoid/logistic function, which will generate an output of probablity and students will be classifed according to whether they are 'likely to graduate'. The final output will be range in between 0 and 1, anything above 0.5 will considered a highly likely to graduate, lower than 0.5 will be less likely to graduate.</p>
 
 </div>
 </div>
@@ -1077,10 +1092,10 @@ After initial training by using the training data, Logistic regression will iter
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Made predictions in 0.0002 seconds.
-Tuned model has a training F1 score of 0.8501.
+<pre>Made predictions in 0.0007 seconds.
+Tuned model has a training F1 score of 0.8447.
 Made predictions in 0.0002 seconds.
-Tuned model has a testing F1 score of 0.8029.
+Tuned model has a testing F1 score of 0.7591.
 </pre>
 </div>
 </div>
